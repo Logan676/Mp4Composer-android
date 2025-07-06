@@ -1,13 +1,12 @@
 package com.daasuu.sample;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
+import android.media.MediaScannerConnection;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -218,15 +217,13 @@ public class BasicUsageActivity extends AppCompatActivity {
      * @return The video MediaStore URI
      */
     public static void exportMp4ToGallery(Context context, String filePath) {
-        // ビデオのメタデータを作成する
-        final ContentValues values = new ContentValues(2);
-        values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
-        values.put(MediaStore.Video.Media.DATA, filePath);
-        // MediaStoreに登録
-        context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                values);
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                Uri.parse("file://" + filePath)));
+        // Index the exported file so that it becomes visible in gallery apps.
+        MediaScannerConnection.scanFile(
+                context,
+                new String[]{filePath},
+                new String[]{"video/mp4"},
+                null
+        );
     }
 
 
