@@ -8,15 +8,14 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
 
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.VideoSize;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.Player;
+import androidx.media3.common.VideoSize;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 
 @SuppressLint("ViewConstructor")
 public class PlayerTextureView extends TextureView implements TextureView.SurfaceTextureListener, Player.Listener {
@@ -24,22 +23,22 @@ public class PlayerTextureView extends TextureView implements TextureView.Surfac
     private final static String TAG = PlayerTextureView.class.getSimpleName();
 
     protected static final float DEFAULT_ASPECT = -1f;
-    private final SimpleExoPlayer player;
+    private final ExoPlayer player;
     protected float videoAspect = DEFAULT_ASPECT;
 
     public PlayerTextureView(Context context, String path) {
         super(context, null, 0);
 
         // Produces DataSource instances through which media data is loaded.
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context, Util.getUserAgent(context, "yourApplicationName"));
+        DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(context);
 
         // This is the MediaSource representing the media to be played.
         MediaItem mediaItem = MediaItem.fromUri(Uri.parse(path));
         MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(mediaItem);
 
-        // SimpleExoPlayer
-        player = new SimpleExoPlayer.Builder(context).build();
+        // ExoPlayer
+        player = new ExoPlayer.Builder(context).build();
         player.setRepeatMode(Player.REPEAT_MODE_ALL);
         // Prepare the player with the source.
         player.setMediaSource(videoSource);

@@ -98,7 +98,7 @@ dependencies {
 
 ## Sample Dependencies
 * [glide](https://github.com/bumptech/glide)
-* [ExoPlayer](https://github.com/google/ExoPlayer)
+* [Media3 ExoPlayer](https://developer.android.com/jetpack/androidx/releases/media3)
 
 
 ## License
