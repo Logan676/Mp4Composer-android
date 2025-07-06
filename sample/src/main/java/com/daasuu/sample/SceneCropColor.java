@@ -1,6 +1,6 @@
 package com.daasuu.sample;
 
-import android.support.annotation.ColorRes;
+import androidx.annotation.ColorRes;
 
 public enum SceneCropColor {
 
