@@ -1,7 +1,6 @@
 package com.daasuu.sample;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -9,7 +8,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
+import android.media.MediaScannerConnection;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
@@ -277,12 +276,12 @@ public class FillModeCustomActivity extends AppCompatActivity {
     }
 
     public static void exportMp4ToGallery(Context context, String filePath) {
-        final ContentValues values = new ContentValues(2);
-        values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
-        values.put(MediaStore.Video.Media.DATA, filePath);
-        context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                values);
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                Uri.parse("file://" + filePath)));
+        // Index the exported file so that it appears in gallery apps.
+        MediaScannerConnection.scanFile(
+                context,
+                new String[]{filePath},
+                new String[]{"video/mp4"},
+                null
+        );
     }
 }
