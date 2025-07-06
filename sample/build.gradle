@@ -27,12 +27,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
     implementation 'com.github.bumptech.glide:glide:3.8.0'
 
     implementation project(':mp4compose')
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.19.1'
-    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
