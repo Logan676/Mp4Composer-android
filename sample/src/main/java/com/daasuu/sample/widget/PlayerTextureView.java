@@ -8,18 +8,18 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
 
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.LoopingMediaSource;
+import com.google.android.exoplayer2.VideoSize;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.google.android.exoplayer2.video.VideoListener;
 
 @SuppressLint("ViewConstructor")
-public class PlayerTextureView extends TextureView implements TextureView.SurfaceTextureListener, VideoListener {
+public class PlayerTextureView extends TextureView implements TextureView.SurfaceTextureListener, Player.Listener {
 
     private final static String TAG = PlayerTextureView.class.getSimpleName();
 
@@ -34,17 +34,17 @@ public class PlayerTextureView extends TextureView implements TextureView.Surfac
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context, Util.getUserAgent(context, "yourApplicationName"));
 
         // This is the MediaSource representing the media to be played.
+        MediaItem mediaItem = MediaItem.fromUri(Uri.parse(path));
         MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(path));
-
-        LoopingMediaSource loopingMediaSource = new LoopingMediaSource(videoSource);
-
+                .createMediaSource(mediaItem);
 
         // SimpleExoPlayer
-        player = ExoPlayerFactory.newSimpleInstance(context);
+        player = new SimpleExoPlayer.Builder(context).build();
+        player.setRepeatMode(Player.REPEAT_MODE_ALL);
         // Prepare the player with the source.
-        player.prepare(loopingMediaSource);
-        player.addVideoListener(this);
+        player.setMediaSource(videoSource);
+        player.prepare();
+        player.addListener(this);
 
         setSurfaceTextureListener(this);
     }
@@ -91,8 +91,11 @@ public class PlayerTextureView extends TextureView implements TextureView.Surfac
     }
 
     @Override
-    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-        Log.d(TAG, "width = " + width + " height = " + height + " unappliedRotationDegrees = " + unappliedRotationDegrees + " pixelWidthHeightRatio = " + pixelWidthHeightRatio);
+    public void onVideoSizeChanged(VideoSize videoSize) {
+        int width = videoSize.width;
+        int height = videoSize.height;
+        float pixelWidthHeightRatio = videoSize.pixelWidthHeightRatio;
+        Log.d(TAG, "width = " + width + " height = " + height + " pixelWidthHeightRatio = " + pixelWidthHeightRatio);
         videoAspect = ((float) width / height) * pixelWidthHeightRatio;
         Log.d(TAG, "videoAspect = " + videoAspect);
         requestLayout();
