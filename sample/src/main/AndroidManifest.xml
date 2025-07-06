@@ -29,7 +29,8 @@
         <activity
             android:name=".MovieListActivity"
             android:label="@string/title_fill_mode_custom_movie_list" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+  namespace 'com.daasuu.mp4compose'
   compileSdkVersion COMPILE_SDK_VERSION as int
   buildToolsVersion BUILD_TOOLS_VERSION
 
@@ -26,5 +27,5 @@ android {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  implementation "androidx.annotation:annotation:1.1.0"
+  implementation "androidx.annotation:annotation:1.9.1"
 }
