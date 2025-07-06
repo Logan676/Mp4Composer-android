@@ -31,6 +31,7 @@ import com.daasuu.mp4compose.filter.GlFilter;
 import com.daasuu.sample.widget.GesturePlayerTextureView;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -76,7 +77,11 @@ public class FillModeCustomActivity extends AppCompatActivity {
         });
         btnCodec = findViewById(R.id.btn_codec);
         btnCodec.setOnClickListener((v) -> {
-            codec();
+            try {
+                codec();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         layoutCodec = findViewById(R.id.layout_codec);
         btnClose = findViewById(R.id.close);
@@ -141,7 +146,7 @@ public class FillModeCustomActivity extends AppCompatActivity {
         frameLayout.addView(playerTextureView, 1);
     }
 
-    private void codec() {
+    private void codec() throws IOException {
 
         layoutCodec.setVisibility(View.VISIBLE);
         btnCodec.setEnabled(false);
@@ -244,7 +249,7 @@ public class FillModeCustomActivity extends AppCompatActivity {
         return getAndroidMoviesFolder().getAbsolutePath() + "/" + new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date()) + ".mp4";
     }
 
-    public Size getVideoResolution(String path) {
+    public Size getVideoResolution(String path) throws IOException {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
         int width = Integer.valueOf(
